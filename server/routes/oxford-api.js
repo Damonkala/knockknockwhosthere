@@ -1,24 +1,39 @@
 'use strict';
 
 var request = require('request');
-var fs = require('fs');
 
-module.exports.uploadImage = function(filename, cb) {
+module.exports.postUrl = function(url, cb) {
   var options = {
     method: 'POST',
     url: 'https://api.projectoxford.ai/face/v0/detections?analyzesAge=true&analyzesGender=true&analyzesHeadPose=true',
     headers: {
+      'Content-Type': 'application/json',
+      'Ocp-Apim-Subscription-Key': 'a7283cfa95c94dc28a8d302fcc8e8297'
+    },
+    json: {url: url}
+  };
+
+  post(options, cb);
+}
+
+module.exports.uploadFile = function(data, cb) {
+  var options = {
+    method: 'POST',
+    url: 'https://api.projectoxford.ai/face/v0/detections',
+    headers: {
       'Content-Type': 'application/octet-stream',
       'Ocp-Apim-Subscription-Key': 'a7283cfa95c94dc28a8d302fcc8e8297'
     },
-    body: fs.createReadStream(filename)
+    body: data
   };
 
+  post(options, cb);
+}
+
+var post = function(options, cb) {
   request(options, function(err, response, body) {
     if (!err && response.statusCode === 200) {
-      var result = JSON.parse(body);
-      console.log(result);
-      cb(null, 200, result.faceId);
+      cb(null, 200, JSON.parse(body));
     }
     else {
       cb(err, response.statusCode);
@@ -26,7 +41,7 @@ module.exports.uploadImage = function(filename, cb) {
   });
 }
 
-module.exports.identify = function(faceId, faceIds) {
+module.exports.identify = function(faceId, faceIds, cb) {
   var options = {
     method: 'POST',
     url: 'https://api.projectoxford.ai/face/v0/findsimilars',
@@ -34,7 +49,7 @@ module.exports.identify = function(faceId, faceIds) {
       'Content-Type': 'application/json',
       'Ocp-Apim-Subscription-Key': 'a7283cfa95c94dc28a8d302fcc8e8297'
     },
-    body: {
+    json: {
       faceId: faceId,
       faceIds: faceIds
     }
@@ -42,15 +57,13 @@ module.exports.identify = function(faceId, faceIds) {
 
   request(options, function(err, response, body) {
     if (!err && response.statusCode === 200) {
-      var result = JSON.parse(body);
-      console.log(result);
       // result sample:
       // [
       //   {
       //     "faceId": "4edd8ff8-4372-4edf-ae31-c73b59da6e1e"
       //   }
       // ]
-      cb(null, 200, result);
+      cb(null, 200, body);
     }
     else {
       cb(err, response.statusCode);
