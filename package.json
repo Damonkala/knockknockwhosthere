@@ -1,9 +1,12 @@
 {
   "name": "knockknockwhosthere",
   "version": "0.0.0",
-  "private": true,
+  "private": false,
   "scripts": {
     "start": "node server/app"
+  },
+  "engines": {
+    "node": "0.12.x"
   },
   "dependencies": {
     "body-parser": "~1.13.2",

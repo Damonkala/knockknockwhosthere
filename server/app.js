@@ -6,7 +6,7 @@ var logger = require('morgan');
 var bodyParser = require('body-parser');
 
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/kkwt');
+mongoose.connect(process.env.MONGO_URL || 'mongodb://localhost/kkwt');
 
 var http = require('http');
 
