@@ -45,5 +45,11 @@ router.get('/:id', function(req, res, next) {
   });
 });
 
+router.delete('/all', function(req, res, next) {
+  Photo.remove({}, function(err){
+    res.status(err ? 400 : 200).send(err || 'All photos deleted.');
+  })
+})
+
 
 module.exports = router;

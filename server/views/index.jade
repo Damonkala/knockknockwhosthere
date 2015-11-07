@@ -4,13 +4,27 @@ block content
   
   h1= title
 
-  h3 GET /photos
-  p Get all photos
-
-  h3 POST /photos
-  p Store a photo.
-
   h3 Upload an image here!
   form(action='/photos', method='post', enctype='multipart/form-data')
     input#photo(type='file', name='photo', multiple='false')
     button(type='submit') Submit
+
+  h2 Endpoints:
+  
+  a(href='/photos')
+    h3 GET /photos
+  p Get all photos
+
+  h3 GET /photos/:id
+  p Get one photo by _id
+
+  a(href='/photos/show')
+    h3 GET /photos/show
+  p Show all photos
+
+  h3 GET /photos/show/:id
+  p Show one photos by _id
+
+  h3 POST /photos
+  p Store a photo.
+
