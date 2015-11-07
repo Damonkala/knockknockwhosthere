@@ -4,7 +4,7 @@ directory is specified with the --upload-dir
 flag, the picture is saved to that directory.
 *********************************************/
 
-var tessel = require('tessel');
+module.exports = {takePicture : function(){var tessel = require('tessel');
 var camera = require('camera-vc0706').use(tessel.port['B']);
 
 var notificationLED = tessel.led[3]; // Set up an LED to notify when we're taking a picture
@@ -33,4 +33,5 @@ camera.on('ready', function() {
 
 camera.on('error', function(err) {
   console.error(err);
-});
+})
+}}

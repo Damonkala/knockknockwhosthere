@@ -10,6 +10,7 @@ specified light or sound level trigger is met.
 
 module.exports = {ambientInit : function(){ 
 
+var cameraFiles = require('../camera/camera.js')
 var tessel = require('tessel')
 var ambientlib = require('ambient-attx4')
 var ambient = ambientlib.use(tessel.port['A'])
@@ -48,6 +49,7 @@ ambient.on('ready', function () {
   ambient.setSoundTrigger(0.11);
 
   ambient.on('sound-trigger', function(data) {
+    cameraFiles.takePicture();
     console.log("Something happened with sound: ", data);
 
     // Clear it
