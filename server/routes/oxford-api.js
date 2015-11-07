@@ -13,7 +13,14 @@ module.exports.postUrl = function(url, cb) {
     json: {url: url}
   };
 
-  post(options, cb);
+  request(options, function(err, response, body) {
+    if (!err && response.statusCode === 200) {
+      cb(null, 200, body);
+    }
+    else {
+      cb(err, response.statusCode);
+    }
+  });
 }
 
 module.exports.uploadFile = function(data, cb) {
@@ -27,10 +34,6 @@ module.exports.uploadFile = function(data, cb) {
     body: data
   };
 
-  post(options, cb);
-}
-
-var post = function(options, cb) {
   request(options, function(err, response, body) {
     if (!err && response.statusCode === 200) {
       cb(null, 200, JSON.parse(body));
