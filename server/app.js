@@ -17,6 +17,15 @@ var server = http.createServer(app);
 
 app.io.attach(server);
 
+var CORS = (function(req,res,next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Cache-Control, Pragma, Origin, Authorization, Content-Type, X-Requested-With");
+  res.header("Access-Control-Allow-Methods", "DELETE, GET, PUT, POST");
+  next();
+})
+
+app.use(CORS);
+
 var port = normalizePort(process.env.PORT || '8000');
 app.set('port', port);
 

@@ -17,11 +17,9 @@ module.exports = function(io){
 
     io.emit('photo', photo);
 
-    console.log('req.file:', req.file)
-
     photo.data.data = req.file.buffer;
 
-    // console.log('photo:', photo);
+    console.log('photo:', photo);
     photo.save(function(err, savedPhoto){
       res.status(err ? 400 : 200).send(err || 'Image saved:');
     });
@@ -49,6 +47,8 @@ module.exports = function(io){
       if(err) return res.status(400).send(err);
 
       photo.name = req.body.name;
+      console.log('req.body:', req.body);
+      console.log('photo:', photo)
       photo.save(function(err, savedPhoto){
         res.send({_id: req.body._id, name: req.body.name});
       });
