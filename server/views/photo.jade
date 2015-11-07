@@ -1,0 +1,8 @@
+extends layout
+
+block content
+
+  each photo in photos
+    a(href='/photos/show/' + photo._id)
+      img(src= photo.img)
+    p Id: #{photo._id}

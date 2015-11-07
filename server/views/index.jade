@@ -8,4 +8,9 @@ block content
   p Get all photos
 
   h3 POST /photos
-  p Store a photo. Request body: { data: Buffer }
+  p Store a photo.
+
+  h3 Upload an image here!
+  form(action='/photos', method='post', enctype='multipart/form-data')
+    input#photo(type='file', name='photo', multiple='false')
+    button(type='submit') Submit
