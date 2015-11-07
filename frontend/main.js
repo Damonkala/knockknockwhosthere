@@ -3,8 +3,8 @@
 $(document).ready(init);
 
 function init(){
-  // $('.save').click(saveImage);
-  // $('.delete').click(deleteImage);
+  $('.identify').click(saveName);
+  $('.forget').click(forgetName);
 }
 
 var socket = io.connect('http://knockknockwhosthere.herokuapp.com');
@@ -14,11 +14,16 @@ socket.on('photo', function (data) {
   socket.emit('my other event', { my: 'data' });
 });
 
-// function saveImage(){
+function saveName(){
+  var receivedName = $('.faceId').val();
+  console.log(receivedName);
+  //SAVE IMAGE WITH NAME AS ATTR
+  //...
+  $('.faceId').val('');
+}
 
-// }
-
-// function delete(){
-
-// }
+function forgetName(){
+  //DELETE IMG FROM DATABASE
+  $('.faceId').val('')
+}
 
