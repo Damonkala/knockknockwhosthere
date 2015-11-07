@@ -21,3 +21,5 @@ router.get('/', function(req, res, next) {
     res.status(err ? 400 : 200).send(err || photos);
   });
 });
+
+module.exports = router;
