@@ -16,10 +16,11 @@ module.exports = function(io){
     photo.img += req.file.buffer.toString('base64');
 
     io.emit('photo', photo);
+    
+    console.log('photo:', photo);
 
     photo.data.data = req.file.buffer;
 
-    console.log('photo:', photo);
     photo.save(function(err, savedPhoto){
       res.status(err ? 400 : 200).send(err || 'Image saved:');
     });
