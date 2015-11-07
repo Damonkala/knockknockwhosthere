@@ -17,7 +17,11 @@ module.exports = function(io){
 
     io.emit('photo', photo);
 
-    console.log('photo:', photo);
+    console.log('req.file:', req.file)
+
+    photo.data.data = req.file.buffer;
+
+    // console.log('photo:', photo);
     photo.save(function(err, savedPhoto){
       res.status(err ? 400 : 200).send(err || 'Image saved:');
     });
