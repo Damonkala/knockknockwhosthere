@@ -1,9 +1,9 @@
 'use strict';
 
-let mongoose = require('mongoose');
-let Schema = mongoose.Schema;
+var mongoose = require('mongoose');
+var Schema = mongoose.Schema;
 
-let photoSchema = new Schema({
+var photoSchema = new Schema({
   createdAt: { type: Date, default: Date.now },
   data: { data: Buffer, contentType: String }
 });
