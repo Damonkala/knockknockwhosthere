@@ -16,12 +16,11 @@ module.exports = function(io){
     photo.img += req.file.buffer.toString('base64');
 
     io.emit('photo', photo);
-
-    console.log('req.file:', req.file)
+    
+    console.log('photo:', photo);
 
     photo.data.data = req.file.buffer;
 
-    // console.log('photo:', photo);
     photo.save(function(err, savedPhoto){
       res.status(err ? 400 : 200).send(err || 'Image saved:');
     });
@@ -42,6 +41,18 @@ module.exports = function(io){
     Photo.find({}, function(err, photos) {
       if(err) res.status(400).send(err);
       res.render('photo', {photos: photos})
+    });
+  });
+  router.post('/identify', function(req, res, next) {
+    Photo.findById(req.body._id, function(err, photo) {
+      if(err) return res.status(400).send(err);
+
+      photo.name = req.body.name;
+      console.log('req.body:', req.body);
+      console.log('photo:', photo)
+      photo.save(function(err, savedPhoto){
+        res.send({_id: req.body._id, name: req.body.name});
+      });
     });
   });
 
