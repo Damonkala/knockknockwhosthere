@@ -13,6 +13,15 @@ var http = require('http');
 var app = express();
 var server = http.createServer(app);
 
+var io = require('socket.io')(server);
+
+io.on('connection', function (socket) {
+  socket.emit('message', { hello: 'world' });
+  socket.on('my other event', function (data) {
+    console.log(data);
+  });
+});
+
 var port = normalizePort(process.env.PORT || '8000');
 app.set('port', port);
 
@@ -36,6 +45,7 @@ app.use(function(req, res, next) {
   err.status = 404;
   next(err);
 });
+
 
 // error handlers
 
