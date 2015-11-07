@@ -55,5 +55,5 @@ module.exports.identify = function(faceId, faceIds) {
     else {
       cb(err, response.statusCode);
     }
-  }));
+  });
 }
