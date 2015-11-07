@@ -44,6 +44,16 @@ module.exports = function(io){
       res.render('photo', {photos: photos})
     });
   });
+  router.post('/identify', function(req, res, next) {
+    Photo.findById(req.body._id, function(err, photo) {
+      if(err) return res.status(400).send(err);
+
+      photo.name = req.body.name;
+      photo.save(function(err, savedPhoto){
+        res.send({_id: req.body._id, name: req.body.name});
+      });
+    });
+  });
 
   router.get('/show/:id', function(req, res, next) {
     Photo.findById(req.params.id, function(err, photo) {
