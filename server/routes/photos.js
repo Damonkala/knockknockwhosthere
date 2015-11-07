@@ -2,6 +2,8 @@
 var express = require('express');
 var router = express.Router();
 
+var oxford = require('./oxford-api');
+
 var multer = require('multer');
 var upload = multer({ storage: multer.memoryStorage() });
 
@@ -12,17 +14,37 @@ module.exports = function(io){
   router.post('/', upload.single('photo'), function(req, res, next) {
     var photo = new Photo();
 
+    console.log('photo added:', photo._id);
+
     photo.img = 'data:image/png;base64,'
     photo.img += req.file.buffer.toString('base64');
 
     io.emit('photo', photo);
     
-    console.log('photo:', photo);
-
     photo.data.data = req.file.buffer;
 
     photo.save(function(err, savedPhoto){
-      res.status(err ? 400 : 200).send(err || 'Image saved:');
+      oxford.uploadFile(req.file.buffer, function(err, status, data){
+        if(!data){
+          return res.send('Face not detected.');
+        }
+
+        
+
+        savedPhoto.faceId = data[0].faceId;
+
+        Photo.find({}, function(err, photos){
+          var ids = photos.map(function(photo){
+            return photo.faceId;
+          });
+
+          oxford.
+        })
+        savedPhoto.save(function(err, savedPhoto){
+
+          res.status(err ? 400 : 200).send(err || 'Image saved:');
+        });        
+      });
     });
   });
 
