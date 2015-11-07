@@ -2,13 +2,15 @@
 
 var request = require('request');
 
+var oxfordApiKey = 'a7283cfa95c94dc28a8d302fcc8e8297';
+
 module.exports.postUrl = function(url, cb) {
   var options = {
     method: 'POST',
     url: 'https://api.projectoxford.ai/face/v0/detections?analyzesAge=true&analyzesGender=true&analyzesHeadPose=true',
     headers: {
       'Content-Type': 'application/json',
-      'Ocp-Apim-Subscription-Key': 'a7283cfa95c94dc28a8d302fcc8e8297'
+      'Ocp-Apim-Subscription-Key': oxfordApiKey
     },
     json: {url: url}
   };
@@ -29,7 +31,7 @@ module.exports.uploadFile = function(data, cb) {
     url: 'https://api.projectoxford.ai/face/v0/detections',
     headers: {
       'Content-Type': 'application/octet-stream',
-      'Ocp-Apim-Subscription-Key': 'a7283cfa95c94dc28a8d302fcc8e8297'
+      'Ocp-Apim-Subscription-Key': oxfordApiKey
     },
     body: data
   };
@@ -50,7 +52,7 @@ module.exports.identify = function(faceId, faceIds, cb) {
     url: 'https://api.projectoxford.ai/face/v0/findsimilars',
     headers: {
       'Content-Type': 'application/json',
-      'Ocp-Apim-Subscription-Key': 'a7283cfa95c94dc28a8d302fcc8e8297'
+      'Ocp-Apim-Subscription-Key': oxfordApiKey
     },
     json: {
       faceId: faceId,
