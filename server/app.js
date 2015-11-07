@@ -10,8 +10,12 @@ mongoose.connect(process.env.MONGOLAB_URI || process.env.MONGO_URL || 'mongodb:/
 
 var http = require('http');
 
+var io = require('socket.io')();
 var app = express();
+app.io = io;
 var server = http.createServer(app);
+
+app.io.attach(server);
 
 var port = normalizePort(process.env.PORT || '8000');
 app.set('port', port);
@@ -28,7 +32,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', require('./routes/index'));
 // app.use('/users', require('./routes/users'));
-app.use('/photos', require('./routes/photos'));
+app.use('/photos', require('./routes/photos')(io));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -36,6 +40,7 @@ app.use(function(req, res, next) {
   err.status = 404;
   next(err);
 });
+
 
 // error handlers
 
