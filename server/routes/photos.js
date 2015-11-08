@@ -14,7 +14,6 @@ module.exports = function(io){
   router.post('/', upload.single('photo'), function(req, res, next) {
     var photo = new Photo();
 
-    console.log('photo added:', photo._id);
 
     photo.img = 'data:image/png;base64,'
     photo.img += req.file.buffer.toString('base64');
