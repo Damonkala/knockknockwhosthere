@@ -12,6 +12,7 @@ var Photo = require('../models/photo');
 module.exports = function(io){
 
   router.post('/', upload.single('photo'), function(req, res, next) {
+    console.log('req.file:', req.file);
     var photo = new Photo();
 
 
@@ -22,7 +23,6 @@ module.exports = function(io){
     
     photo.data.data = req.file.buffer;
 
-    console.log('req.file:', req.file);
 
     photo.save(function(err, photo){
       oxford.uploadFile(req.file.buffer, function(err, status, data){
