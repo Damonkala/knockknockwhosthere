@@ -7,6 +7,7 @@ var photoSchema = new Schema({
   createdAt: { type: Date, default: Date.now },
   data: { data: Buffer, contentType: String },
   name: { type: String },
+  faceId: { type: String },
   img: { type: String }
 });
 
