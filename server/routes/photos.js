@@ -23,27 +23,55 @@ module.exports = function(io){
     
     photo.data.data = req.file.buffer;
 
-    photo.save(function(err, savedPhoto){
+    photo.save(function(err, photo){
       oxford.uploadFile(req.file.buffer, function(err, status, data){
         if(!data){
           return res.send('Face not detected.');
         }
 
-        
+        var faceId = data[0].faceId;
 
-        savedPhoto.faceId = data[0].faceId;
+        photo.faceId = faceId;
+        photo.save(function(err, savedPhoto){
+          Photo.find({}, function(err, photos){
 
-        Photo.find({}, function(err, photos){
-          var ids = photos.map(function(photo){
-            return photo.faceId;
+            var ids = photos.map(function(photo){
+              return photo.faceId;
+            });
+
+            console.log('faceId:', faceId);
+            console.log('ids:', ids);
+
+            oxford.identify(faceId, ids, function(err, statusCode, body){
+              if(err || statusCode !== 200){
+                res.status(400).send({'identify error:': err, body: body});
+              } else {
+                console.log('body:', body);
+                var matchIds = body.map(function(match){
+                  return match.faceId;
+                });
+
+                Photo.find({'faceId': { $in: matchIds} }, function(err, matches){
+                  if(err || !matches) return res.send('No matches');
+                  var names = matches.filter(function(match){
+                    return match.name;
+                  });
+                  if(names[0]){
+                    var name = names[0].name;
+                    matches.forEach(function(match){
+                      match.name = name;
+                      match.save();
+                    });
+                    io.emit('name', name);
+                    res.send({name: name});
+                  } else {
+                    res.send({name: '_unknown_'});
+                  }
+                });
+              }
+            });
           });
-
-          oxford.
         })
-        savedPhoto.save(function(err, savedPhoto){
-
-          res.status(err ? 400 : 200).send(err || 'Image saved:');
-        });        
       });
     });
   });
@@ -77,6 +105,9 @@ module.exports = function(io){
       });
     });
   });
+  router.get('/nuke', function(req, res){
+    res.render('nuke');
+  })
 
   router.get('/show/:id', function(req, res, next) {
     Photo.findById(req.params.id, function(err, photo) {
@@ -85,13 +116,14 @@ module.exports = function(io){
     });
   });
 
+
   router.get('/:id', function(req, res, next) {
     Photo.findById(req.params.id, function(err, photo) {
       res.status(err ? 400 : 200).send(err || photo);
     });
   });
 
-  router.delete('/all', function(req, res, next) {
+  router.post('/nuke', function(req, res, next) {
     Photo.remove({}, function(err){
       res.status(err ? 400 : 200).send(err || 'All photos deleted.');
     })

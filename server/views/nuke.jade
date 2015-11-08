@@ -1,0 +1,8 @@
+extends layout
+
+block content
+  
+  h1 DELETE DATABASE
+  h2 Are you sure??
+  form(action='/photos/nuke', method='post')
+    button(type='submit') Nuke all photos!!!
