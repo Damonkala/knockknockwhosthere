@@ -2,18 +2,27 @@
 
 var request = require('request');
 
+var oxfordApiKey = 'a7283cfa95c94dc28a8d302fcc8e8297';
+
 module.exports.postUrl = function(url, cb) {
   var options = {
     method: 'POST',
     url: 'https://api.projectoxford.ai/face/v0/detections?analyzesAge=true&analyzesGender=true&analyzesHeadPose=true',
     headers: {
       'Content-Type': 'application/json',
-      'Ocp-Apim-Subscription-Key': 'a7283cfa95c94dc28a8d302fcc8e8297'
+      'Ocp-Apim-Subscription-Key': oxfordApiKey
     },
     json: {url: url}
   };
 
-  post(options, cb);
+  request(options, function(err, response, faces) {
+    if (!err && response.statusCode === 200) {
+      cb(null, 200, faces);
+    }
+    else {
+      cb(err, response.statusCode);
+    }
+  });
 }
 
 module.exports.uploadFile = function(data, cb) {
@@ -22,18 +31,14 @@ module.exports.uploadFile = function(data, cb) {
     url: 'https://api.projectoxford.ai/face/v0/detections',
     headers: {
       'Content-Type': 'application/octet-stream',
-      'Ocp-Apim-Subscription-Key': 'a7283cfa95c94dc28a8d302fcc8e8297'
+      'Ocp-Apim-Subscription-Key': oxfordApiKey
     },
     body: data
   };
 
-  post(options, cb);
-}
-
-var post = function(options, cb) {
-  request(options, function(err, response, body) {
+  request(options, function(err, response, faces) {
     if (!err && response.statusCode === 200) {
-      cb(null, 200, JSON.parse(body));
+      cb(null, 200, JSON.parse(faces));
     }
     else {
       cb(err, response.statusCode);
@@ -47,7 +52,7 @@ module.exports.identify = function(faceId, faceIds, cb) {
     url: 'https://api.projectoxford.ai/face/v0/findsimilars',
     headers: {
       'Content-Type': 'application/json',
-      'Ocp-Apim-Subscription-Key': 'a7283cfa95c94dc28a8d302fcc8e8297'
+      'Ocp-Apim-Subscription-Key': oxfordApiKey
     },
     json: {
       faceId: faceId,
@@ -55,7 +60,7 @@ module.exports.identify = function(faceId, faceIds, cb) {
     }
   };
 
-  request(options, function(err, response, body) {
+  request(options, function(err, response, faces) {
     if (!err && response.statusCode === 200) {
       // result sample:
       // [
@@ -63,7 +68,7 @@ module.exports.identify = function(faceId, faceIds, cb) {
       //     "faceId": "4edd8ff8-4372-4edf-ae31-c73b59da6e1e"
       //   }
       // ]
-      cb(null, 200, body);
+      cb(null, 200, faces);
     }
     else {
       cb(err, response.statusCode);
