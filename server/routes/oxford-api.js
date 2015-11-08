@@ -15,9 +15,9 @@ module.exports.postUrl = function(url, cb) {
     json: {url: url}
   };
 
-  request(options, function(err, response, body) {
+  request(options, function(err, response, faces) {
     if (!err && response.statusCode === 200) {
-      cb(null, 200, body);
+      cb(null, 200, faces);
     }
     else {
       cb(err, response.statusCode);
@@ -36,9 +36,9 @@ module.exports.uploadFile = function(data, cb) {
     body: data
   };
 
-  request(options, function(err, response, body) {
+  request(options, function(err, response, faces) {
     if (!err && response.statusCode === 200) {
-      cb(null, 200, JSON.parse(body));
+      cb(null, 200, JSON.parse(faces));
     }
     else {
       cb(err, response.statusCode);
@@ -60,7 +60,7 @@ module.exports.identify = function(faceId, faceIds, cb) {
     }
   };
 
-  request(options, function(err, response, body) {
+  request(options, function(err, response, faces) {
     if (!err && response.statusCode === 200) {
       // result sample:
       // [
@@ -68,7 +68,7 @@ module.exports.identify = function(faceId, faceIds, cb) {
       //     "faceId": "4edd8ff8-4372-4edf-ae31-c73b59da6e1e"
       //   }
       // ]
-      cb(null, 200, body);
+      cb(null, 200, faces);
     }
     else {
       cb(err, response.statusCode);
