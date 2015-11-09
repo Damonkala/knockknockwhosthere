@@ -125,7 +125,7 @@ module.exports = function(io){
   });
 
   router.post('/nuke', function(req, res, next) {
-    Photo.remove({}, function(err){
+    Photo.find({}).remove(function(err){
       res.status(err ? 400 : 200).send(err || 'All photos deleted.');
     })
   });
