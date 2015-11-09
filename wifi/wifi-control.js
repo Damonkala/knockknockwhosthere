@@ -1,5 +1,5 @@
 module.exports = {wifiInit : function(){var wifi = require('wifi-cc3000');
-var network = 'codinghouse'; // put in your network name here
+var network = 'Codinghouse'; // put in your network name here
 var pass = 'c0dingh0use'; // put in your password here, or leave blank for unsecured
 var security = 'wpa2'; // other options are 'wep', 'wpa', or 'unsecured'
 var timeouts = 0;
