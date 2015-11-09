@@ -12,9 +12,9 @@ var Photo = require('../models/photo');
 module.exports = function(io){
 
   router.post('/', upload.single('photo'), function(req, res, next) {
+    console.log('req.file:', req.file);
     var photo = new Photo();
 
-    console.log('photo added:', photo._id);
 
     photo.img = 'data:image/png;base64,'
     photo.img += req.file.buffer.toString('base64');
@@ -22,6 +22,7 @@ module.exports = function(io){
     io.emit('photo', photo);
     
     photo.data.data = req.file.buffer;
+
 
     photo.save(function(err, photo){
       oxford.uploadFile(req.file.buffer, function(err, status, data){
