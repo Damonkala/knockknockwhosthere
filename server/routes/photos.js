@@ -11,21 +11,21 @@ var Photo = require('../models/photo');
 
 module.exports = function(io){
 
-  router.post('/', upload.single('photo'), function(req, res, next) {
-    console.log('req.file:', req.file);
+  router.post('/', function(req, res, next) {
+    console.log('req.file:', req.body);
     var photo = new Photo();
 
 
     photo.img = 'data:image/png;base64,'
-    photo.img += req.file.buffer.toString('base64');
+    photo.img += req.body.toString('base64');
 
     io.emit('photo', photo);
-    
-    photo.data.data = req.file.buffer;
+
+    photo.data.data = req.body;
 
 
     photo.save(function(err, photo){
-      oxford.uploadFile(req.file.buffer, function(err, status, data){
+      oxford.uploadFile(req.body, function(err, status, data){
         if(!data){
           return res.send('Face not detected.');
         }
@@ -130,5 +130,5 @@ module.exports = function(io){
     })
   });
 
-  return router;  
+  return router;
 };
